@@ -2,7 +2,7 @@
 #include <string>
 using namespace std;
 
-#define tax_rate_define 0.35  
+#define TAX_RATE_DEFINE 0.35
 
 int main() {
     cout << "The purpose of this code is to analyze product sales and inventory for a store.\n"
@@ -10,13 +10,13 @@ int main() {
 
     string product_name;
     int product_category;
-    int initial_inventory(0);   
-    int remaining_inventory{0}; 
+    int initial_inventory(0);
+    int remaining_inventory{0};
     float product_price = 0.0f;
     int sold_items = 0;
-    const float tax_rate = 0.35;  
+    const float tax_rate = 0.35;
 
-    cout << "What is the product name?";
+    cout << "What is the product name? ";
     getline(cin, product_name);
 
     cout << "What is the product category?[1-5] ";
@@ -31,16 +31,15 @@ int main() {
     cout << "What is the number of items sold? ";
     cin >> sold_items;
 
-    
-    auto total_sales = sold_items * product_price;  
-    decltype(initial_inventory) updated_inventory = initial_inventory - sold_items; 
-    
+    auto total_sales = sold_items * product_price;
+    decltype(initial_inventory) updated_inventory = initial_inventory - sold_items;
+
     string status = (updated_inventory < 10) ? "Low inventory" : "Sufficient inventory";
 
     if (product_category >= 1 && product_category <= 5) {
-        cout << "Valid category \n";
+        cout << "Valid category\n";
     } else {
-        cout << "Invalid category! Please enter a number between 1 and 5 \n";
+        cout << "Invalid category! Please enter a number between 1 and 5\n";
     }
 
     switch (product_category) {
@@ -51,21 +50,20 @@ int main() {
         case 5: cout << "Category 5: Miscellaneous\n"; break;
     }
 
-    cout << "Receipt:-\n";
+    cout << "Receipt:\n";
     for (int i = 1; i <= sold_items; i++) {
-        cout << " for item " << i;
-        cout << product_price << endl;  // Missing semicolon was here
-        cout << updated_inventory << endl;  // Fixed the format for printing updated inventory
+        cout << "Item " << i << endl;
+        cout << "Price: " << product_price << endl;
+        cout << "Updated inventory: " << updated_inventory << endl;
     }
-    
-    cout << "\nProduct Name:" << product_name;
-    cout << "\nProduct Category:" << product_category;
-    cout << "\nProduct Price:" << product_price;
-    cout << "\nSold Items:" << sold_items;
 
-    cout << "\nNew inventory:" << updated_inventory;
-    cout << "\nTotal sales: " << total_sales;
-    cout << "\nInventory status: " << status;
+    cout << "\nProduct Name: " << product_name;
+    cout << "\nProduct Category: " << product_category;
+    cout << "\nProduct Price: " << product_price;
+    cout << "\nSold Items: " << sold_items;
+    cout << "\nNew Inventory: " << updated_inventory;
+    cout << "\nTotal Sales: " << total_sales;
+    cout << "\nInventory Status: " << status;
     cout << "\nConstant tax rate: " << tax_rate;
-    cout << "\nPreprocessor defined tax rate: " << tax_rate_define << endl;
+    cout << "\nPreprocessor defined tax rate: " << TAX_RATE_DEFINE << endl;
 }
