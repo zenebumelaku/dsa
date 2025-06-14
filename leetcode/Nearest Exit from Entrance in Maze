@@ -1,0 +1,95 @@
+class Solution {
+public:
+    int nearestExit(vector<vector<char>>& maze, vector<int>& entrance) 
+    {
+        queue<vector<int>> toVisit{};
+        unordered_set<int> visited{};
+        vector<vector<int>> hs(maze.size(), vector<int>(maze.at(0).size(), 100000)); //maybe higher number 
+        hs.at(entrance.at(0)).at(entrance.at(1)) = 0;
+
+        vector<int> up(2), down(2), left(2), right(2);
+        int y = 0, x = 0, currFlatenedLocation = 0, minMove = 0;
+        int up_hs = 0, down_hs = 0, left_hs = 0, right_hs = 0; 
+        int vertical = maze.size();  // 3
+        int horizontal = maze.at(0).size(); //4
+        int flattenedStart = entrance.at(0)*horizontal + entrance.at(1); 
+
+        bool isExit = false;
+        y = entrance.at(0);
+        x = entrance.at(1);
+
+        toVisit.push(entrance);
+        vector<int> currentLocation(2);
+
+        while (!toVisit.empty())
+        {
+            up_hs = 100000;
+            down_hs = 100000;
+            left_hs = 100000;
+            right_hs = 100000;
+            //helper variables 
+            currentLocation = toVisit.front();
+            toVisit.pop();
+            y = currentLocation.at(0);
+            x = currentLocation.at(1);
+            currFlatenedLocation = y * horizontal + x; 
+
+            //we already visited skip to next item in toVisit
+            if (visited.find(currFlatenedLocation) != visited.end())
+            {
+                continue;
+            }
+
+            //only visit those that are in bounds and an open cell
+            if (y-1 > -1 && maze.at(y-1).at(x) == '.')
+            {
+                toVisit.push(vector<int>{y-1, x});
+            }
+            if(y+1 < vertical && maze.at(y+1).at(x) == '.')
+            {
+                toVisit.push(vector<int>{y+1,x});
+            }
+            if(x-1 > -1 && maze.at(y).at(x-1) == '.')
+            {
+                toVisit.push(vector<int>{y, x-1});
+            }
+            if(x+1 < horizontal && maze.at(y).at(x+1) == '.')
+            {
+                toVisit.push(vector<int>{y, x+1});
+            }
+            if (currentLocation == entrance) continue;
+
+            //find min of neighbors
+            //check if the index is valid and if yes store the value
+            if (y-1 > -1 && maze.at(y-1).at(x) != '+') 
+            {
+                up_hs = hs.at(y-1).at(x); //stay at 1000
+            }
+            if (y+1 < vertical && maze.at(y+1).at(x) != '+')
+            {
+                down_hs = hs.at(y+1).at(x);
+            }
+            if (x-1 > -1 && maze.at(y).at(x-1) != '+')
+            {
+                left_hs = hs.at(y).at(x-1);
+            }
+            if (x+1 < horizontal && maze.at(y).at(x+1) != '+')
+            {
+                right_hs = hs.at(y).at(x+1);
+            }
+            minMove = min(min(up_hs, down_hs), min(left_hs, right_hs));
+            hs.at(y).at(x) = minMove + 1;
+            visited.insert(currFlatenedLocation);
+            //check if currentLocation is an exit to the maze
+            if (y == 0 || x == 0 || y==vertical-1 || x==horizontal-1)
+            {
+                isExit = true;
+            }
+            if (isExit)
+            {
+                return hs.at(y).at(x);
+            }
+        }
+        return -1;
+    }
+};
