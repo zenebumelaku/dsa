@@ -1,0 +1,36 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    void getPath(TreeNode* root, vector<string>& out, string& curr) {
+        if(!root) return; // stop the recursion call for null, WON'T happen at leaf itself it stops
+        if(!root->left && !root->right) { // if leaf node is seen then add that leaf to curr, add this string to the output. for a certain path
+            curr += to_string(root->val);
+            out.push_back(curr);
+            return;
+        }
+        string curr1 = curr + to_string(root->val);
+        string curr2 = curr + to_string(root->val);
+        getPath(root->left, out, curr1); // for left sub tree of current node
+        getPath(root->right, out, curr2); // for right sub tree of current node
+    }
+    int sumNumbers(TreeNode* root) {
+        vector<string> out;
+        string init = "";
+        getPath(root, out, init); // intitalize a string
+        int sum = 0;
+        for(auto it : out) {
+            sum += stoi(it);
+        }
+        return sum;
+    }
+};
