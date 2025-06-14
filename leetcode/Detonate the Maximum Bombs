@@ -1,0 +1,59 @@
+class Solution {
+public:
+// simple dfs to visited all possible bombs
+    void dfs(int ind, vector<vector<int>>& overlaps, vector<int> &visited){
+        visited[ind]++;
+
+        for(int j : overlaps[ind]){
+            if(!visited[j])
+                dfs(j, overlaps, visited);
+        }
+    }
+    int maximumDetonation(vector<vector<int>>& bombs) {
+        int len = bombs.size();
+
+        vector<vector<int>>overlaps(len);
+
+// create adj matrix with overlapping bombs
+        for(int i=0 ; i< len ; i++){
+            for(int j=i+1; j< len ; j++){
+                long long dist = pow(bombs[i][0]- bombs[j][0], 2) + pow(bombs[i][1] - bombs[j][1], 2);
+                
+                long long r1 = pow( bombs[i][2], 2);
+                long long r2 = pow( bombs[j][2],2);
+// if the 2nd lies in 1st bombs radius, add it to 1st adj list
+                if(dist <= r1){
+                    overlaps[i].push_back(j);
+                }
+// same for 2nd bomb
+                if(dist <= r2){
+                    overlaps[j].push_back(i);
+                }
+
+            }
+        }
+        
+        //use dfs to figure out which start results in max visited bombs
+       
+        int res =1;
+
+        for(int i=0 ; i< len; i++){
+            int totalDeto =0;
+            vector<int>visited(len,0);
+            dfs(i, overlaps, visited );
+            
+        //count total visited for i'th bomb
+            for(int visit : visited){
+                if(visit>0) totalDeto++;
+            }
+        // if total is bombs.size() , then it is the max possible, no need to check for remaining 
+            if(totalDeto == len) return len;
+            res = max(res, totalDeto);
+        }
+
+        return res;
+
+
+        
+    }
+};
