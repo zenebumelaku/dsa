@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void addsum(unordered_map<int,int> &umi,unordered_map<int,vector<int>> &umv, int &id,int &res){
+        res += umi[id];
+        if(umv[id].empty()){
+            return;
+        }
+        for(int x : umv[id]){
+            addsum(umi,umv,x,res);
+        }
+    }
+    int getImportance(vector<Employee*> employees, int id) {
+        int res = 0;
+        unordered_map<int,int> umi;
+        unordered_map<int,vector<int>> umv;
+        for(int i = 0;i < employees.size();i++){
+            umi[employees[i]->id] = employees[i]->importance;
+            umv[employees[i]->id] = employees[i]->subordinates;
+        }
+        addsum(umi,umv,id,res);
+        return res;
+    }
+};
