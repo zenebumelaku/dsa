@@ -1,14 +1,3 @@
-//Approach-1 (Using BFS) Time : O(m*n)
-/*
-	Do BFS from every 1, and find the nearest 0.
-	That's fine but too slow. Because you will be calling one BFS call for each 1.
-	So, what we can do to make it better ?
-	Instead of doing BFS from 1, store all 0s and do BFS from them, and when you see the nearest 1, update its value. It will be shortest coz we stop at nearest 1
-	
-	Why Time complexity is O(m*n) ?
-	Since we update the 1 with smallest distance, we don't get to visit that again and hence
-	every cell gets added to queue only once.
-*/
 
 class Solution {
 public:
