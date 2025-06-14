@@ -1,0 +1,155 @@
+class Solution {
+public:
+    bool isvalid(int i,int j,int n,int m){
+        if(i<0 or i>=n or j<0 or j>=m){
+            return false;
+        }
+        return true;
+    }
+    bool solve(vector<vector<int>>& grid,vector<vector<int>>&vis,int i,int j){
+        int n=grid.size();
+        int m=grid[0].size();
+        if(i<0 or i>=n or j<0 or j>=m or vis[i][j]==1){
+            return false;
+        }
+        if(i==n-1 and j==m-1){
+            return true;
+        }
+        vis[i][j]=1;
+        int a=grid[i][j];
+        if(a==2){
+    if(isvalid(i+1,j,n,m)){  // check right direction instead of down
+        int a=grid[i+1][j];
+        if(a==2 or a==5 or a==6){
+            bool b=solve(grid,vis,i+1,j);
+            if(b){
+                return true;
+            }
+        }
+    }
+    if(isvalid(i-1,j,n,m)){  // check left direction instead of up
+        int a=grid[i-1][j];
+        if(a==2 or a==3 or a==4){
+            bool b=solve(grid,vis,i-1,j);
+            if(b){
+                return true;
+            }
+        }
+    }
+}
+
+        if(a==1){
+            if(isvalid(i,j+1,n,m)){
+                int a=grid[i][j+1];
+                if(a==1 or a==3 or a==5){
+                    bool b=solve(grid,vis,i,j+1);
+                    if(b){
+                        return true;
+                    }
+                }
+            }
+            if(isvalid(i,j-1,n,m)){
+                int a=grid[i][j-1];
+                if(a==1 or a==6 or a==4){
+                    bool b=solve(grid,vis,i,j-1);
+                    if(b){
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        if(a==3){
+            if(isvalid(i,j-1,n,m)){
+                int a=grid[i][j-1];
+                if(a==1 or a==4 or a==6){
+                    bool b=solve(grid,vis,i,j-1);
+                    if(b){
+                        return true;
+                    }
+                }
+            }
+            if(isvalid(i+1,j,n,m)){
+                int a=grid[i+1][j];
+                if(a==2 or a==5 or a==6){
+                    bool b=solve(grid,vis,i+1,j);
+                    if(b){
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        if(a==4){
+             if(isvalid(i,j+1,n,m)){
+                int a=grid[i][j+1];
+                if(a==1 or a==3 or a==5){
+                    bool b=solve(grid,vis,i,j+1);
+                    if(b){
+                        return true;
+                    }
+                }
+            }
+            if(isvalid(i+1,j,n,m)){
+                int a=grid[i+1][j];
+                if(a==2 or a==5 or a==6){
+                    bool b=solve(grid,vis,i+1,j);
+                    if(b){
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        if(a==5){
+             if(isvalid(i,j-1,n,m)){
+                int a=grid[i][j-1];
+                if(a==1 or a==4 or a==6){
+                    bool b=solve(grid,vis,i,j-1);
+                    if(b){
+                        return true;
+                    }
+                }
+            }
+            if(isvalid(i-1,j,n,m)){
+                int a=grid[i-1][j];
+                if(a==2 or a==3 or a==4){
+                    bool b=solve(grid,vis,i-1,j);
+                    if(b){
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        if(a==6){
+             if(isvalid(i,j+1,n,m)){
+                int a=grid[i][j+1];
+                if(a==1 or a==3 or a==5){
+                    bool b=solve(grid,vis,i,j+1);
+                    if(b){
+                        return true;
+                    }
+                }
+            }
+            if(isvalid(i-1,j,n,m)){
+                int a=grid[i-1][j];
+                if(a==2 or a==4 or a==3){
+                    bool b=solve(grid,vis,i-1,j);
+                    if(b){
+                        return true;
+                    }
+                }
+            }
+            
+        }
+        return false;
+    }
+    bool hasValidPath(vector<vector<int>>& grid) {
+        int n=grid.size();
+        int m=grid[0].size();
+        vector<vector<int>>vis(n,vector<int>(m,0));
+        return solve(grid,vis,0,0);
+        
+    }
+};
