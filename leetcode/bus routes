@@ -1,0 +1,81 @@
+class Solution {
+public:
+    
+    bool intersect(vector<int> A, vector<int> B){
+        int i = 0, j = 0;
+        while(i<A.size() && j<B.size()){
+            if(A[i] == B[j]){
+                return true;
+            }
+            
+            if(A[i] < B[j]){
+                i++;
+            } else {
+                j++;
+            }
+        }
+        
+        return false;
+    }
+    
+    int numBusesToDestination(vector<vector<int>>& routes, int source, int target) {
+        //Algorithm
+        // If two buses have same route number, this means that buses are actually connected
+        //We can think of this problem as a connected graph problem
+        //Then, we have to find the minimum path from source to target
+        // Store route numbers with buses, only store source and target
+        // Any route from source to target is considerable
+        if(source == target){
+            return 0;
+        }
+        
+        int N = routes.size();
+        
+        vector<vector<int>> graph(N);
+        for(int i=0; i<N; i++){
+            sort(routes[i].begin(), routes[i].end());
+        }
+        
+        set<int> seen;
+        set<int> targets;
+        queue<pair<int, int>> q;
+        
+        for(int i=0; i<N; i++){
+            for(int j=i+1; j<N; j++){
+                if(intersect(routes[i], routes[j])){
+                    graph[i].push_back(j);
+                    graph[j].push_back(i);
+                }
+            }
+        }
+        
+        for(int i=0; i<N; i++){
+            if(binary_search(routes[i].begin(), routes[i].end(), source)){
+                seen.insert(i);
+                q.push({i, 0});
+            }
+            
+            if(binary_search(routes[i].begin(), routes[i].end(), target)){
+                targets.insert(i);
+            }
+        }
+        
+        while(!q.empty()){
+            auto info = q.front();
+            q.pop();
+            int node = info.first, depth = info.second;
+            if(targets.find(node)!=targets.end()){
+                return depth+1;
+            }
+            
+            for(int nei: graph[node]){
+                if(seen.find(nei)==seen.end()){
+                    seen.insert(nei);
+                    q.push({nei, depth+1});
+                }
+            }
+        }
+        
+        return -1;
+    }
+};
