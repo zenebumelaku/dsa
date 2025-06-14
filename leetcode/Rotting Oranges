@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+
+    // NOTE: IT'S MATRIX (nxm) with (nxm) nodes code
+    bool isVaild(int x, int y, vector<vector<int>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+
+        if (x >= 0 && y >= 0 && x < n && y < m) {
+            return true;
+        }
+
+        return false;
+    }
+
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        // NOTE: We are given a "grid", thus (nxm) nodes
+        int n = grid.size();
+        int m = grid[0].size();
+
+        queue<pair<int, int>> rottened;
+        int freshTomatos = 0;
+        // int totalRottenedTomatos = 0;
+
+        int dx[] = {0, 1, 0, -1};
+        int dy[] = {-1, 0, 1, 0};
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                // adding the rottened tomato
+                if (grid[i][j] == 2) {
+                    rottened.push({i, j});
+                } else if (grid[i][j] == 1) {
+                    freshTomatos++;
+                }
+            }
+        }
+
+        // EDGE CASE: rottened.size() == 0,
+        // 1. if you have fresh tomatos, then nothing can rip them so -1 days
+        // (not possible to rip)
+        // 2. but if you neither have fresh nor rottened tomatos, then 0 days
+        if (rottened.size() == 0)
+            return (freshTomatos == 0) ? 0 : -1;
+
+        int days = -1;
+        // MULTI-SOURCE BFS - "day" or "level"
+        while (rottened.size() != 0) {
+
+            int n = rottened.size(); // total node/tomatos in current level
+            days++;
+
+            for (int times = 0; times < n; times++) {
+                // Just igonore "times"
+
+                pair<int, int> curr = rottened.front();
+                rottened.pop();
+
+                for (int i = 0; i < 4; i++) {
+                    int x = dx[i] + curr.first;
+                    int y = dy[i] + curr.second;
+
+                    if (isVaild(x, y, grid) && grid[x][y] == 1) {
+                        // the corrdinates are of "valid fresh tomato"
+                        // NOT USING "visited" because, changing the orignal
+                        // grid i.e. 1 (fresh) to (rottened)
+                        grid[x][y] = 2; // marked visited
+                        freshTomatos--;
+                        rottened.push({x, y});
+                    }
+                }
+            }
+        }
+
+        return (freshTomatos == 0) ? days
+                                   : -1; // -1 if all tomatos not rottened
+    }
+};
