@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int racecar(int target) {
+        queue<pair<int, int>> states;
+        states.push({0, 1});
+
+        int depth = 0;
+        while (!states.empty()) {
+            int levelSize = states.size();
+            for (int i = 0; i < levelSize; i++) {
+                pair<int, int> currState = states.front(); states.pop();
+
+                if (currState.first == target) return depth;
+
+                if (currState.first >= target * 2 || currState.first < 0)
+                    continue;
+                
+                int nextPos = currState.first + currState.second, nextSpeed = currState.second * 2;
+                states.push({nextPos, nextSpeed});
+
+                if (nextPos < target && currState.second < 0)
+                    states.push({currState.first, 1});
+                else if (nextPos > target && currState.second > 0)
+                    states.push({currState.first, -1});
+            }
+            depth++;
+        }
+
+        return -1;
+    }
+};
